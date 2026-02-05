@@ -7,28 +7,28 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 
-# Calculate Prevalence
+# Calculate prevalence.
 def calculate_prevalence(y: pd.Series) -> float:
     counts = y.value_counts()
     return counts[1] / len(y)
 
-# Drop columns
+# Drop columns.
 def drop_columns(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
 	return df.drop(cols, axis=1)
 
-# Drop columns with many missing values
+# Drop columns with many missing values.
 def drop_high_missing_cols(df: pd.DataFrame, threshold: float = 0.5) -> pd.DataFrame:
 	missing = df.isna().mean()
 	drop_cols = missing[missing > threshold].index.tolist()
 	return df.drop(columns=drop_cols)
 
-# Consolidating top levels
+# Consolidating top levels.
 def collapse_top_levels(df: pd.DataFrame, col: str, top_levels: list[str], other_label: str = "Other") -> pd.DataFrame:
 	if col in df.columns:
 		df[col] = df[col].apply(lambda x: x if x in top_levels else other_label).astype("category")
 	return df
 
-# Min Max Scaling
+# Min Max Scaling.
 def scale_numeric_columns(df: pd.DataFrame, exclude_cols: list[str] = None) -> pd.DataFrame:
 	df = df.copy()
 	if exclude_cols is None:
@@ -42,23 +42,23 @@ def scale_numeric_columns(df: pd.DataFrame, exclude_cols: list[str] = None) -> p
 	
 	return df
 
-# One Hot Encoding
+# One Hot Encoding.
 def one_hot_encode(df: pd.DataFrame, categorical_cols: list[str] = None) -> pd.DataFrame:
 	if categorical_cols is None:
 		categorical_cols = list(df.select_dtypes("category").columns)
 	
 	return pd.get_dummies(df, columns=categorical_cols)
 
-# Splitting Train Test and Tune
+# Splitting Train Test and Tune.
 def split_train_test_tune(df: pd.DataFrame, target_col: str, test_size: float = 0.25) -> tuple:
-	# First split: train and temp
+	# First split: train and temp.
 	train, test = train_test_split(
 		df,
 		test_size=test_size,
 		stratify=df[target_col]
 	)
 	
-	# Second split: split temp into tune and test (50/50)
+	# Second split: split temp into tune and test (50/50).
 	tune, test = train_test_split(
 		test,
 		train_size=0.5,
