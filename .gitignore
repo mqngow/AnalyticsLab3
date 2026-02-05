@@ -80,3 +80,7 @@ Thumbs.db
 # *.h5
 # *.pkl
 # *.joblib
+
+# Lab test files
+lab3_Exploration_test.py
+lab3_Functions_test.py
