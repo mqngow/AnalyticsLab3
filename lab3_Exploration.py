@@ -57,20 +57,6 @@ missing = college.isna().mean()
 drop_cols = missing[missing > .5].index.tolist()
 college = college.drop(columns=drop_cols)
 
-# %%
-# Since there is a lot of missing data in this data set, I am going to populate numeric columns with median and categorical/object columns with mode
-num_cols = list(college.select_dtypes(include=[np.number]).columns)
-for col in num_cols:
-    if college[col].isna().any():
-        college[col] = college[col].fillna(college[col].median())
-
-obj_cols = list(college.select_dtypes(include=["object", "category"]).columns)
-for col in obj_cols:
-    if college[col].isna().any():
-        mode = college[col].mode(dropna=True)
-        fill = mode.iloc[0] if len(mode) else "Unknown"
-        college[col] = college[col].fillna(fill)
-
 # Correctly label state
 college["state"] = college["state"].astype("category")
 
